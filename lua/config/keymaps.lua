@@ -12,5 +12,5 @@ vim.keymap.set("v", "<C-/>", "gc", { remap = true, desc = "Comment selection" })
 -- （可选）把终端功能挪到 Ctrl+\，这样两个功能都能保留
 vim.keymap.set({"n", "t"}, "<C-\\>", function() Snacks.terminal.focus(nil, { cwd = LazyVim.root() }) end, { desc = "Terminal (Root Dir)" })
 
--- Terminal 模式快速退出到 Normal 模式
-vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
+-- Terminal 模式快速退出到 Normal 模式（Ctrl+] 不干扰 TUI 程序）
+vim.keymap.set("t", "<C-]>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
