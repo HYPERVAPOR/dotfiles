@@ -1,0 +1,14 @@
+# ==========================================
+# ~/.zshrc.local — 本地敏感配置（不要提交到 git！）
+# ==========================================
+# 复制此文件为 ~/.zshrc.local，填入你的真实值
+
+# Google Cloud
+# export GOOGLE_CLOUD_PROJECT="your-project-id"
+
+# API Keys / Tokens（永远不要进 git！）
+# export OPENAI_API_KEY="sk-..."
+# export ANTHROPIC_API_KEY="sk-ant-..."
+
+# 其他个人路径
+# export COMPANY_VPN="..."

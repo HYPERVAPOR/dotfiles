@@ -1,0 +1,14 @@
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data
+
+# Local secrets — never commit
+zsh/.zshrc.local
+*.local
+.env
+.env.*
