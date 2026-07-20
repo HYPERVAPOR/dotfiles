@@ -50,6 +50,12 @@ else
   check 0 "checkhealth passed"
 fi
 
+# --- Stow ---
+echo ""
+echo "--- Stow ---"
+command -v stow >/dev/null 2>&1
+check $? "GNU Stow installed"
+
 # --- Symlinks ---
 echo ""
 echo "--- Symlinks ---"
