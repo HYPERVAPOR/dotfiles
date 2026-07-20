@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# 始终在仓库根运行,避免 security scan 的相对路径('.')扫到别的目录
+cd "$(dirname "$0")"
+
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
