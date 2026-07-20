@@ -70,7 +70,12 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-vi-mode)
+
+# --- zsh-vi-mode:命令行 vim 模式(insert/normal 切换)---
+# Esc 切 normal 模式的响应延迟(单位 1/100 秒)。
+# 0.1s 既灵敏,又不会破坏下面那些 Alt 组合键(Alt+c/y/o 等 = ESC+字母)
+export KEYTIMEOUT=1
 
 source $ZSH/oh-my-zsh.sh
 
@@ -216,3 +221,6 @@ eval $(thefuck --alias)
 
 # 加载本地敏感配置（不进入 git）
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# kimi-code
+export PATH="/home/hv/.kimi-code/bin:$PATH"
