@@ -5,23 +5,21 @@ return {
     "sindrets/diffview.nvim",
     "nvim-telescope/telescope.nvim",
   },
-  cmd = "Neogit",
+  keys = {
+    { "<leader>gg", "<cmd>Neogit<cr>", desc = "Open Neogit" },
+    { "<leader>gc", "<cmd>Neogit commit<cr>", desc = "Neogit commit" },
+    { "<leader>gl", "<cmd>Neogit log<cr>", desc = "Neogit log" },
+  },
   config = function()
     require("neogit").setup({
-      -- 【核心配置】：调整面板的弹出布局
-      kind = "vsplit", -- 可选值: "split" (上下), "vsplit" (左右), "floating" (悬浮), "replace" (全屏默认)
-
-      -- 确保这些设置开启，这样你可以看到更多信息
+      -- 状态面板“Recent commits”默认只显示 10 条，这里改多一点
       status = {
-        recent_commit_count = 10, -- 显示最近的 10 次提交历史
+        recent_commit_count = 25,
       },
-
       integrations = {
-        diffview = true, -- 这是核心：必须开启，否则你看不到代码差异
+        diffview = true,
+        telescope = true,
       },
     })
   end,
-  keys = {
-    { "<leader>gs", "<cmd>Neogit<cr>", desc = "Open Neogit" },
-  },
 }

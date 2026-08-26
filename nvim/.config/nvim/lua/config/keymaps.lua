@@ -1,16 +1,16 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
+-- 让单独按空格变成“什么都不做”（防止光标乱跑）
+vim.keymap.set("n", "<Space>", "<Nop>", { silent = true })
 
--- 覆盖 LazyVim 默认的 <leader>gs（Telescope git_status），改为打开 Neogit
-vim.keymap.set("n", "<leader>gs", "<cmd>Neogit<cr>", { desc = "Open Neogit" })
+-- 清除搜索高亮
+vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>", { silent = true, desc = "Clear search highlights" })
 
--- 恢复 Ctrl+/ 为注释（LazyVim v8 默认把它改成了打开终端）
-vim.keymap.set("n", "<C-/>", "gcc", { remap = true, desc = "Comment line" })
-vim.keymap.set("v", "<C-/>", "gc", { remap = true, desc = "Comment selection" })
+-- visual 模式下粘贴时，先把选中内容删到黑洞寄存器，避免覆盖剪贴板
+vim.keymap.set("x", "p", '"_dP', { noremap = true, silent = true })
+vim.keymap.set("x", "P", '"_dP', { noremap = true, silent = true })
 
--- （可选）把终端功能挪到 Ctrl+\，这样两个功能都能保留
-vim.keymap.set({"n", "t"}, "<C-\\>", function() Snacks.terminal.focus(nil, { cwd = LazyVim.root() }) end, { desc = "Terminal (Root Dir)" })
-
--- Terminal 模式快速退出到 Normal 模式（Ctrl+] 不干扰 TUI 程序）
-vim.keymap.set("t", "<C-]>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
+-- 只有 y 能修改系统剪贴板；d/x/c 默认删到黑洞寄存器
+-- 需要真正剪切时，显式用 "+d / "+x / "+c
+local black_hole_ops = { "d", "D", "x", "X", "c", "C", "s", "S" }
+for _, key in ipairs(black_hole_ops) do
+  vim.keymap.set({ "n", "x" }, key, '"_' .. key, { noremap = true, silent = true })
+end
