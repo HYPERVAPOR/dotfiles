@@ -224,3 +224,7 @@ eval $(thefuck --alias)
 
 # kimi-code
 export PATH="/home/hv/.kimi-code/bin:$PATH"
+
+# >>> Codex installer >>>
+export PATH="/home/hv/.local/bin:$PATH"
+# <<< Codex installer <<<
