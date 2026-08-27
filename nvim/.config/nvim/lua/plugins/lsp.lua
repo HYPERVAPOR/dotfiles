@@ -59,8 +59,11 @@ return {
 
       require("mason-lspconfig").setup({
         -- 自动安装这些 server，也可以改成空表手动用 :Mason 装
-        ensure_installed = { "lua_ls" },
-        automatic_enable = true,
+        ensure_installed = { "lua_ls", "rust_analyzer" },
+        -- 自动启用已安装的 server，但排除 copilot（不想用 AI 补全）
+        automatic_enable = {
+          exclude = { "copilot" },
+        },
       })
     end,
   },
