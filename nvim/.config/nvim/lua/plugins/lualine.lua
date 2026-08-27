@@ -2,22 +2,61 @@ return {
   "nvim-lualine/lualine.nvim",
   dependencies = { "nvim-tree/nvim-web-devicons" },
   config = function()
-    -- 读取当前 nvim 进程占用的物理内存（MB）
+    -- 读取当前 nvim 进程及其所有子进程占用的物理内存（MB）
     local function get_mem_mb()
-      local pid = vim.fn.getpid()
-      local f = io.open("/proc/" .. pid .. "/status", "r")
-      if f then
+      local function pid_rss(pid)
+        local f = io.open("/proc/" .. pid .. "/status", "r")
+        if not f then
+          return 0
+        end
+        local rss = 0
         for line in f:lines() do
           local kb = line:match("^VmRSS:%s+(%d+)%s+kB")
           if kb then
-            f:close()
-            return string.format("%.1f", tonumber(kb) / 1024)
+            rss = tonumber(kb)
+            break
           end
         end
         f:close()
+        return rss
       end
+
+      local function children(pid)
+        local path = string.format("/proc/%d/task/%d/children", pid, pid)
+        local f = io.open(path, "r")
+        if not f then
+          return {}
+        end
+        local out = f:read("*a") or ""
+        f:close()
+        local pids = {}
+        for p in out:gmatch("%d+") do
+          table.insert(pids, tonumber(p))
+        end
+        return pids
+      end
+
+      local total_kb = 0
+      local visited = {}
+      local function accumulate(pid)
+        if visited[pid] then
+          return
+        end
+        visited[pid] = true
+        total_kb = total_kb + pid_rss(pid)
+        for _, child in ipairs(children(pid)) do
+          accumulate(child)
+        end
+      end
+
+      accumulate(vim.fn.getpid())
+
       -- 如果读不了 /proc（比如 macOS），退回到 Lua 内存
-      return string.format("%.1f", collectgarbage("count") / 1024)
+      if total_kb == 0 then
+        return string.format("%.1f", collectgarbage("count") / 1024)
+      end
+
+      return string.format("%.1f", total_kb / 1024)
     end
 
     _G.lualine_mem_mb = get_mem_mb()
