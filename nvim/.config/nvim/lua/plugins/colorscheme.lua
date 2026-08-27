@@ -1,21 +1,21 @@
 return {
-  "catppuccin/nvim",
-  name = "catppuccin",
+  "clearaspect/onehalf",
   lazy = false,
   priority = 1000,
   config = function()
-    require("catppuccin").setup({
-      flavour = "mocha",
+    require("onehalf").setup({
       integrations = {
         telescope = true,
         treesitter = true,
+        gitsigns = true,
+        cmp = true,
       },
     })
 
-    vim.cmd.colorscheme("catppuccin")
+    vim.cmd.colorscheme("onehalfdark")
 
-    -- 窗口分隔线用 catppuccin 的 surface1，低调不刺眼
-    vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#45475a", bg = "NONE" })
-    vim.api.nvim_set_hl(0, "VertSplit", { fg = "#45475a", bg = "NONE" })
+    -- 窗口分隔线用低调的灰色，不刺眼
+    vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3e4451", bg = "NONE" })
+    vim.api.nvim_set_hl(0, "VertSplit", { fg = "#3e4451", bg = "NONE" })
   end,
 }
