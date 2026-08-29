@@ -74,16 +74,6 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
-# --- 命令行 vim 模式 (zsh 原生) ---
-# Esc 切 normal 模式的响应延迟（单位 1/100 秒）
-export KEYTIMEOUT=1
-bindkey -v
-
-# 在 normal 模式下用 h/l 左右移动，j/k 维持历史上下
-# 如果你希望 j/k 也左右移动，把下面两行注释取消
-# bindkey -M vicmd 'j' backward-char
-# bindkey -M vicmd 'k' forward-char
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
