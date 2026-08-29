@@ -20,6 +20,8 @@ return {
         sorting_strategy = "ascending",
         layout_config = {
           prompt_position = "top",
+          preview_cutoff = 80, -- 终端宽度 >= 80 列就显示预览
+          preview_width = 0.5,
         },
         -- live_grep 用 ripgrep，默认遵守 .gitignore
         vimgrep_arguments = {
