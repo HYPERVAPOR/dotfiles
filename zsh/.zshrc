@@ -70,14 +70,19 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-vi-mode)
-
-# --- zsh-vi-mode:命令行 vim 模式(insert/normal 切换)---
-# Esc 切 normal 模式的响应延迟(单位 1/100 秒)。
-# 0.1s 既灵敏,又不会破坏下面那些 Alt 组合键(Alt+c/y/o 等 = ESC+字母)
-export KEYTIMEOUT=1
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
+
+# --- 命令行 vim 模式 (zsh 原生) ---
+# Esc 切 normal 模式的响应延迟（单位 1/100 秒）
+export KEYTIMEOUT=1
+bindkey -v
+
+# 在 normal 模式下用 h/l 左右移动，j/k 维持历史上下
+# 如果你希望 j/k 也左右移动，把下面两行注释取消
+# bindkey -M vicmd 'j' backward-char
+# bindkey -M vicmd 'k' forward-char
 
 # User configuration
 
