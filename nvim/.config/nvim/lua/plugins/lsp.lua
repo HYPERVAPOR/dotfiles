@@ -26,6 +26,11 @@ return {
         capabilities = capabilities,
       })
 
+      -- clangd 由系统 PATH 上的 clang 提供（Homebrew clang 自带），不归 Mason 管，
+      -- 因此下面的 automatic_enable 不会启用它，必须显式开启。
+      -- Neovim 0.11 起 LSP server 不再随 lspconfig.setup{} 自动启动。
+      vim.lsp.enable("clangd")
+
       -- LSP 附着时绑定快捷键
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("user_lsp_attach", { clear = true }),
