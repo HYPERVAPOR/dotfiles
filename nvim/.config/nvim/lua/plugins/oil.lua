@@ -31,6 +31,76 @@ return {
     },
   },
   config = function(_, opts)
+    local gitignored_cache = {}
+
+    local function get_gitignored(dir)
+      if gitignored_cache[dir] then
+        return gitignored_cache[dir]
+      end
+
+      local ignored = {}
+      local result = vim.system({
+        "git",
+        "ls-files",
+        "--ignored",
+        "--exclude-standard",
+        "--others",
+        "--directory",
+      }, { cwd = dir, text = true }):wait()
+
+      if result.code == 0 then
+        for path in (result.stdout or ""):gmatch("[^\n]+") do
+          ignored[path:gsub("/$", "")] = true
+        end
+      end
+
+      gitignored_cache[dir] = ignored
+      return ignored
+    end
+
+    -- Git ignored 文件使用单独的暗色；未被忽略的 dotfiles 使用正常文件颜色
+    vim.api.nvim_set_hl(0, "OilGitIgnored", {
+      fg = "#5c6370",
+      italic = true,
+    })
+    local group = vim.api.nvim_create_augroup("oil_gitignored_highlight", { clear = true })
+    vim.api.nvim_create_autocmd("ColorScheme", {
+      group = group,
+      callback = function()
+        vim.api.nvim_set_hl(0, "OilGitIgnored", {
+          fg = "#5c6370",
+          italic = true,
+        })
+      end,
+    })
+
+    opts.view_options.highlight_filename = function(entry, is_hidden)
+      local dir = require("oil").get_current_dir()
+      if dir and get_gitignored(dir)[entry.name] then
+        return "OilGitIgnored"
+      end
+
+      if is_hidden then
+        local normal_groups = {
+          directory = "OilDir",
+          link = "OilLink",
+          socket = "OilSocket",
+        }
+        return normal_groups[entry.type] or "OilFile"
+      end
+
+      return nil
+    end
+
+    -- 刷新时清除 Git 状态缓存，及时反映新增/删除的 ignored 文件
+    opts.keymaps["<C-l>"] = {
+      desc = "Refresh",
+      callback = function()
+        gitignored_cache = {}
+        require("oil.actions").refresh.callback()
+      end,
+    }
+
     require("oil").setup(opts)
   end,
 }
