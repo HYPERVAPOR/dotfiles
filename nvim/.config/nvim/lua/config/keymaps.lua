@@ -4,6 +4,13 @@ vim.keymap.set("n", "<Space>", "<Nop>", { silent = true })
 -- 清除搜索高亮
 vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>", { silent = true, desc = "Clear search highlights" })
 
+-- 复制当前文件的绝对路径到系统剪贴板
+vim.keymap.set("n", "<leader>yp", function()
+  local path = vim.fn.expand("%:p")
+  vim.fn.setreg("+", path)
+  vim.notify("Copied path: " .. path)
+end, { silent = true, desc = "Copy absolute file path" })
+
 -- visual 模式下粘贴时，先把选中内容删到黑洞寄存器，避免覆盖剪贴板
 vim.keymap.set("x", "p", '"_dP', { noremap = true, silent = true })
 vim.keymap.set("x", "P", '"_dP', { noremap = true, silent = true })
