@@ -6,7 +6,16 @@ return {
   },
   cmd = "Telescope",
   keys = {
-    { "<C-p>", "<cmd>Telescope find_files<cr>", desc = "Find files (Ctrl+P)" },
+    {
+      "<C-p>",
+      function()
+        require("telescope.builtin").find_files({
+          -- 显示 dotfiles，但仍遵守 .gitignore
+          hidden = true,
+        })
+      end,
+      desc = "Find files (Ctrl+P)",
+    },
     { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
     { "<leader>/", "<cmd>Telescope live_grep<cr>", desc = "Global search" },
     { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
@@ -32,8 +41,8 @@ return {
           "--line-number",
           "--column",
           "--smart-case",
-          -- 加上 --hidden 可以搜隐藏文件（但仍遵守 .gitignore）
-          -- "--hidden",
+          -- 搜索隐藏文件，但仍遵守 .gitignore
+          "--hidden",
         },
       },
       extensions = {
