@@ -21,6 +21,15 @@ vim.opt.splitright = true
 vim.opt.termguicolors = true
 vim.opt.undofile = true
 
+-- 折叠：按语法结构折叠 class / 函数等，默认全部展开
+-- foldmethod=expr + treesitter foldexpr：需要对应语言的 parser，没有 parser 时不会折
+-- （既没 parser、LSP 也不支持 foldingRange 时，由 autocmds.lua 退回按缩进折叠）
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevel = 99        -- 折的展开层级（99 = 不自动折）
+vim.opt.foldlevelstart = 99   -- 打开文件时同样全展开
+vim.opt.foldcolumn = "auto"   -- 有折叠时才显示左侧指示列
+
 -- 把缓冲区末尾的波浪线 (~) 替换为空格，即隐藏它们
 vim.opt.fillchars = { eob = " " }
 

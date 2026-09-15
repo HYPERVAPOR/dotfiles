@@ -8,7 +8,19 @@ return {
     require("nvim-treesitter").setup()
 
     -- 只安装还没装的 parser，避免每次启动都重装
-    local parsers = { "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" }
+    -- 分组只为可读性，顺序无所谓
+    local parsers = {
+      -- Neovim 自身 / 配置
+      "lua", "luadoc", "luap", "vim", "vimdoc", "query",
+      -- 文档 / 标记
+      "markdown", "markdown_inline", "rst", "html", "xml", "dtd",
+      -- 数据 / 配置 / 脚本
+      "bash", "json", "json5", "toml", "yaml", "diff", "regex", "printf", "ninja", "ron",
+      -- 常用语言
+      "c", "cpp", "go", "gomod", "gosum", "gowork",
+      "python", "rust",
+      "javascript", "jsdoc", "typescript", "tsx",
+    }
     local install_dir = require("nvim-treesitter.config").get_install_dir("parser")
     local to_install = vim.tbl_filter(function(lang)
       return vim.fn.filereadable(install_dir .. "/" .. lang .. ".so") ~= 1

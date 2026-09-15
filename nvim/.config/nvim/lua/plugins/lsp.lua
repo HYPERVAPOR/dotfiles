@@ -36,6 +36,16 @@ return {
         group = vim.api.nvim_create_augroup("user_lsp_attach", { clear = true }),
         callback = function(args)
           local bufnr = args.buf
+
+          -- 折叠：LSP 支持 foldingRange 时优先用它（比 treesitter 更贴合语义）
+          -- 同时把 foldmethod 设回 expr，覆盖 autocmds.lua 里可能的缩进兜底
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client:supports_method("textDocument/foldingRange") then
+            local win = vim.api.nvim_get_current_win()
+            vim.wo[win][0].foldmethod = "expr"
+            vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+          end
+
           local map = function(mode, lhs, rhs, desc)
             vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
           end
