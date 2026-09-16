@@ -1,3 +1,7 @@
+-- 在 oil 里按 <CR> 打开文件时，新窗口开在 oil 的哪一侧
+-- "left" = 新窗口在 oil 左边；"right" = 在右边
+local open_side = "left"
+
 return {
   "stevearc/oil.nvim",
   lazy = false,
@@ -10,10 +14,27 @@ return {
   opts = {
     -- 让 oil 接管目录 buffer（nvim . 会先进 oil）
     default_file_explorer = true,
+    -- 目录里新增/删除文件时自动刷新（默认关，所以 AI 建的文件看不到，要按 <C-l>）
+    watch_for_changes = true,
     view_options = { show_hidden = true },
     keymaps = {
       ["g?"] = { "actions.show_help", mode = "n" },
-      ["<CR>"] = "actions.select",
+      -- 文件：在 oil 旁边新开窗口（方向看 open_side）；目录：仍旧就地进入
+      ["<CR>"] = {
+        desc = "Open in a new window beside oil",
+        callback = function()
+          local entry = require("oil").get_cursor_entry()
+          local actions = require("oil.actions")
+          if entry and entry.type == "directory" then
+            actions.select.callback()
+          else
+            actions.select.callback({
+              vertical = true,
+              split = open_side == "left" and "aboveleft" or "belowright",
+            })
+          end
+        end,
+      },
       ["<C-s>"] = { "actions.select", opts = { vertical = true } },
       ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
       ["<C-t>"] = { "actions.select", opts = { tab = true } },
